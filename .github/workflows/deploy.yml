@@ -23,6 +23,15 @@ jobs:
         uses: actions/checkout@v4
 
       # =========================================
+      # REMOVE .GIT BEFORE DEPLOY
+      # =========================================
+
+      - name: Remove Git metadata
+        run: |
+          rm -rf .git
+          rm -rf .github
+
+      # =========================================
       # UPLOAD FILES TO SERVER
       # =========================================
 
@@ -36,7 +45,7 @@ jobs:
 
           port: 22
 
-          source: "./"
+          source: "./*"
 
           target: "/home/s2209682-node/htdocs/s2209682n.ncgrp.xyz/Cloud/hospital-room-management"
 
@@ -59,8 +68,6 @@ jobs:
           script: |
 
             set -e
-
-            export PATH=$PATH:/usr/bin:/usr/local/bin
 
             APP_DIR="/home/s2209682-node/htdocs/s2209682n.ncgrp.xyz/Cloud/hospital-room-management"
 
@@ -109,7 +116,7 @@ jobs:
             docker rmi "$IMAGE_NAME" || true
 
             # =========================================
-            # CLEAN UNUSED DOCKER FILES
+            # CLEAN DOCKER CACHE
             # =========================================
 
             docker system prune -f || true
@@ -132,17 +139,9 @@ jobs:
               "$IMAGE_NAME"
 
             # =========================================
-            # VERIFY RUNNING CONTAINER
+            # VERIFY CONTAINER
             # =========================================
 
-            echo "========================================="
-            echo "RUNNING CONTAINERS"
-            echo "========================================="
-
             docker ps
-
-            echo "========================================="
-            echo "CONTAINER LOGS"
-            echo "========================================="
 
             docker logs "$CONTAINER_NAME"
