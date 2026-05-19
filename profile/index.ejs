@@ -1,0 +1,159 @@
+<div class="dashboard-header">
+
+    <h2>My Profile</h2>
+
+    <p>
+        Manage your account information and profile image
+    </p>
+
+</div>
+
+<div class="profile-page">
+
+    <!-- SIDEBAR -->
+
+    <div class="profile-sidebar">
+
+        <div class="profile-page-avatar">
+
+            <% if (sessionUser.profile_image) { %>
+
+                <img
+                    src="<%= sessionUser.profile_image %>"
+                    alt="Profile Image"
+                >
+
+            <% } else { %>
+
+                <div class="default-avatar">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+        <h3 class="profile-user-name">
+            <%= sessionUser.name %>
+        </h3>
+
+        <div class="profile-user-role">
+
+            <%= sessionUser.role %>
+
+        </div>
+
+        <!-- IMAGE UPLOAD -->
+
+        <form
+            action="/profile/upload-image"
+            method="POST"
+            enctype="multipart/form-data"
+            class="profile-upload"
+        >
+
+            <input
+                type="file"
+                name="profile_image"
+                accept="image/*"
+                required
+            >
+
+            <button
+                type="submit"
+                class="btn"
+            >
+                Upload Image
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- PROFILE CONTENT -->
+
+    <div class="profile-content">
+
+        <!-- ACCOUNT INFORMATION -->
+
+        <div class="profile-card">
+
+            <h3>Account Information</h3>
+
+            <div class="profile-grid">
+
+                <div class="profile-field">
+
+                    <label>Full Name</label>
+
+                    <p>
+                        <%= sessionUser.name %>
+                    </p>
+
+                </div>
+
+                <div class="profile-field">
+
+                    <label>Email Address</label>
+
+                    <p>
+                        <%= sessionUser.email %>
+                    </p>
+
+                </div>
+
+                <div class="profile-field">
+
+                    <label>Role</label>
+
+                    <p>
+                        <%= sessionUser.role %>
+                    </p>
+
+                </div>
+
+                <div class="profile-field">
+
+                    <label>Theme Preference</label>
+
+                    <p>
+                        <%= sessionUser.theme || 'Light Mode' %>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- SECURITY -->
+
+        <div class="profile-card">
+
+            <h3>Quick Actions</h3>
+
+            <div class="profile-actions">
+
+                <a
+                    href="/profile/security"
+                    class="btn"
+                >
+                    Security Settings
+                </a>
+
+                <a
+                    href="/profile/settings"
+                    class="btn outline-btn"
+                >
+                    Application Settings
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

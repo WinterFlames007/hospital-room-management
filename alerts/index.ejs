@@ -1,0 +1,57 @@
+<div class="dashboard-header">
+
+    <h2>High Priority Alerts</h2>
+
+    <p>
+        Monitor urgent isolation cases
+    </p>
+
+</div>
+
+<div class="table-container">
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>Patient</th>
+                <th>Symptoms</th>
+                <th>Priority</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <% alerts.forEach(alert => { %>
+
+                <tr>
+
+                    <td>
+                        <%= alert.full_name %>
+                    </td>
+
+                    <td>
+                        <%= alert.symptoms %>
+                    </td>
+
+                    <td>
+
+                        <span class="priority high">
+
+                            <%= alert.isolation_priority %>
+
+                        </span>
+
+                    </td>
+
+                </tr>
+
+            <% }) %>
+
+        </tbody>
+
+    </table>
+
+</div>

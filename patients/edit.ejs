@@ -1,0 +1,157 @@
+<div class="form-container">
+
+    <h2>Edit Patient</h2>
+
+    <form
+        action="/patients/edit/<%= patient.patient_id %>"
+        method="POST"
+    >
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Patient Name</label>
+
+                <input
+                    type="text"
+                    name="full_name"
+                    value="<%= patient.full_name %>"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Age</label>
+
+                <input
+                    type="number"
+                    name="age"
+                    value="<%= patient.age %>"
+                    required
+                >
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Symptoms</label>
+
+            <textarea
+                name="symptoms"
+                required
+            ><%= patient.symptoms %></textarea>
+
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Infection Risk</label>
+
+                <select name="infection_risk">
+
+                    <option
+                        value="Low"
+                        <%= patient.infection_risk === 'Low' ? 'selected' : '' %>
+                    >
+                        Low Risk
+                    </option>
+
+                    <option
+                        value="Medium"
+                        <%= patient.infection_risk === 'Medium' ? 'selected' : '' %>
+                    >
+                        Medium Risk
+                    </option>
+
+                    <option
+                        value="High"
+                        <%= patient.infection_risk === 'High' ? 'selected' : '' %>
+                    >
+                        High Risk
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Isolation Priority</label>
+
+                <select name="isolation_priority">
+
+                    <option
+                        value="Low"
+                        <%= patient.isolation_priority === 'Low' ? 'selected' : '' %>
+                    >
+                        Low Priority
+                    </option>
+
+                    <option
+                        value="Medium"
+                        <%= patient.isolation_priority === 'Medium' ? 'selected' : '' %>
+                    >
+                        Medium Priority
+                    </option>
+
+                    <option
+                        value="High"
+                        <%= patient.isolation_priority === 'High' ? 'selected' : '' %>
+                    >
+                        High Priority
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Status</label>
+
+            <select name="status">
+
+                <option
+                    value="Waiting"
+                    <%= patient.status === 'Waiting' ? 'selected' : '' %>
+                >
+                    Waiting
+                </option>
+
+                <option
+                    value="Isolated"
+                    <%= patient.status === 'Isolated' ? 'selected' : '' %>
+                >
+                    Isolated
+                </option>
+
+                <option
+                    value="Discharged"
+                    <%= patient.status === 'Discharged' ? 'selected' : '' %>
+                >
+                    Discharged
+                </option>
+
+            </select>
+
+        </div>
+
+        <button
+            type="submit"
+            class="btn"
+        >
+            Update Patient
+        </button>
+
+    </form>
+
+</div>

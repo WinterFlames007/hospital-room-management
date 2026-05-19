@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Hospital Management System</title>
+
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+
+
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+</head>
+
+
+
+<body
+    class="<%= sessionUser && sessionUser.theme === 'dark' ? 'dark-theme' : '' %>"
+    data-success="<%= typeof success !== 'undefined' ? success : '' %>"
+>
+    <!-- LOADER -->
+
+    <div class="loader-wrapper" id="loader">
+
+        <div class="loader">
+
+            <div class="loader-ring"></div>
+
+            <h2>Hopewell Hospital</h2>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="logo-section">
+
+                <h2>Hopewell Hospital</h2>
+
+                <button
+                    class="close-sidebar"
+                    id="closeSidebar"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+            <ul class="sidebar-menu">
+
+                <li class="<%= currentPage === 'dashboard' ? 'active' : '' %>">
+
+                    <a href="/">
+
+                        <i class="fa-solid fa-table-columns"></i>
+
+                        <span>Dashboard</span>
+
+                    </a>
+
+                </li>
+
+                <li class="<%= currentPage === 'patients' ? 'active' : '' %>">
+
+                    <a href="/patients">
+
+                        <i class="fa-solid fa-user-injured"></i>
+
+                        <span>Patients</span>
+
+                    </a>
+
+                </li>
+
+                <li class="<%= currentPage === 'rooms' ? 'active' : '' %>">
+
+                    <a href="/rooms">
+
+                        <i class="fa-solid fa-bed"></i>
+
+                        <span>Rooms</span>
+
+                    </a>
+
+                </li>
+
+                <li class="<%= currentPage === 'assignments' ? 'active' : '' %>">
+
+                    <a href="/assignments">
+
+                        <i class="fa-solid fa-clipboard-list"></i>
+
+                        <span>Assignments</span>
+
+                    </a>
+
+                </li>
+
+
+                <% if (
+                    sessionUser &&
+                    sessionUser.role === 'admin'
+                ) { %>
+
+                <li class="<%= currentPage === 'users' ? 'active' : '' %>">
+
+                    <a href="/users">
+
+                        <i class="fa-solid fa-users"></i>
+
+                        <span>Users</span>
+
+                    </a>
+
+                </li>
+
+                <% } %>
+
+
+                <% if (
+
+                    sessionUser.role === 'admin' ||
+
+                    sessionUser.role === 'hospital_admin'
+
+                ) { %>
+
+                <li class="<%= currentPage === 'reports' ? 'active' : '' %>">
+
+                    <a href="/reports">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                        <span>Reports</span>
+
+                    </a>
+
+                </li>
+
+                <% } %>
+
+                <li>
+
+
+                    <a href="/profile/security">
+
+                        <i class="fa-solid fa-gear"></i>
+
+                        <span>Settings</span>
+
+                    </a>
+
+
+
+                </li>
+
+            </ul>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+
+        <main
+            class="main-content"
+            id="mainContent"
+        >
+
+
+            <!-- TOPBAR -->
+            <header class="topbar" style="overflow: visible;">
+
+                <div class="topbar-left">
+ 
+                    <button
+                        class="menu-toggle"
+                        id="menuToggle"
+                    >
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+
+                    <h1>Hospital Management System</h1>
+
+
+
+
+
+                </div>
+
+
+
+
+
+
+
+                <div class="topbar-right">
+
+                    <!-- THEME -->
+
+                    <button
+                        class="theme-toggle icon-btn"
+                        id="themeToggle"
+                    >
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+
+                    
+                <!-- NOTIFICATIONS -->
+
+                <div class="notification-wrapper">
+
+                    <button
+                        class="notification-btn"
+                        id="notificationToggle"
+                    >
+
+                        <i class="fa-solid fa-bell"></i>
+
+                        <span class="notification-count">
+                            4
+                        </span>
+
+                    </button>
+
+                    <!-- DROPDOWN -->
+
+                    <div
+                        class="notification-dropdown"
+                        id="notificationDropdown"
+                    >
+
+
+                        <div class="notification-header">
+
+                            <div>
+
+                                <h3>Notifications</h3>
+
+                                <small id="notificationText">
+                                    4 unread
+                                </small>
+
+                            </div>
+
+                            <button
+                                class="mark-all-btn"
+                                id="markAllRead"
+                            >
+                                Mark all read
+                            </button>
+
+                        </div>
+
+
+
+                        <div class="notification-list">
+
+                            <% if (
+                                notifications &&
+                                notifications.length > 0
+                            ) { %>
+
+                                <% notifications.forEach(notification => { %>
+
+                                    <div class="
+                                        notification-item
+                                        <%= notification.is_read ? 'read' : 'unread' %>
+                                        <%= notification.type %>
+                                    ">
+
+                                        <div class="notification-content">
+
+                                            <h4>
+                                                <%= notification.title %>
+                                            </h4>
+
+                                            <p>
+                                                <%= notification.message %>
+                                            </p>
+
+                                            <span>
+                                                <%= notification.created_at %>
+                                            </span>
+
+                                            <% if (!notification.is_read) { %>
+
+                                                <button
+                                                    class="read-btn"
+                                                    data-id="<%= notification.notification_id %>"
+                                                >
+                                                    Mark read
+                                                </button>
+
+                                            <% } %>
+
+                                        </div>
+
+                                    </div>
+
+                                <% }) %>
+
+                            <% } else { %>
+
+                                <div class="notification-empty">
+
+                                    <i class="fa-solid fa-bell-slash"></i>
+
+                                    <p>No notifications available</p>
+
+                                </div>
+
+                            <% } %>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                    <!-- PROFILE -->
+
+                    <div class="profile-wrapper">
+
+                        <button
+                            class="profile-trigger"
+                            id="profileToggle"
+                        >
+
+                            <div class="profile-avatar">
+
+                                <% if (
+                                    sessionUser &&
+                                    sessionUser.profile_image
+                                ) { %>
+
+                                    <img
+                                        src="<%= sessionUser.profile_image %>"
+                                        class="topbar-avatar-img"
+                                    >
+
+                                <% } else { %>
+
+                                    <i class="fa-solid fa-user"></i>
+
+                                <% } %>
+
+                            </div>
+
+                            <span>
+                                <%= sessionUser ? sessionUser.name : 'Guest' %>
+                            </span>
+
+                            <i class="fa-solid fa-chevron-down"></i>
+
+                        </button>
+
+                        <!-- DROPDOWN -->
+
+                        <div
+                            class="profile-dropdown"
+                            id="profileDropdown"
+                        >
+
+                            <a href="/profile">
+
+                                <i class="fa-solid fa-user"></i>
+
+                                My Profile
+
+                            </a>
+
+
+                            <hr>
+
+                            <a
+                                href="/logout"
+                                class="logout-link"
+                            >
+
+                                <i class="fa-solid fa-right-from-bracket"></i>
+
+                                Logout
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>   
+
+            </header>
+
+            <!-- PAGE CONTENT -->
+
+
+            <section class="page-content">
+
+                <!-- SKELETON LOADER -->
+
+                <div
+                    class="skeleton-wrapper"
+                    id="skeletonLoader"
+                >
+
+                    <div class="skeleton-card"></div>
+
+                    <div class="skeleton-grid">
+
+                        <div class="skeleton-box"></div>
+
+                        <div class="skeleton-box"></div>
+
+                        <div class="skeleton-box"></div>
+
+                        <div class="skeleton-box"></div>
+
+                    </div>
+
+                    <div class="skeleton-table"></div>
+
+                </div>
+
+                <!-- REAL CONTENT -->
+
+                <div id="realContent">
+
+                    <%- body %>
+
+                </div>
+
+            </section>
+
+
+
+
+        </main>
+
+    </div>
+
+    <script src="/js/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <!-- TOAST -->
+
+    <div
+        class="toast"
+        id="toast"
+    >
+        Action completed successfully
+    </div>
+    <div class="page-transition" id="pageTransition"></div>
+</body>
+</html>

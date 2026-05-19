@@ -1,0 +1,115 @@
+<div class="form-container">
+
+    <h2>Edit Room</h2>
+
+    <form
+        action="/rooms/edit/<%= room.room_id %>"
+        method="POST"
+    >
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Room Number</label>
+
+                <input
+                    type="text"
+                    name="room_number"
+                    value="<%= room.room_number %>"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Capacity</label>
+
+                <input
+                    type="number"
+                    name="capacity"
+                    value="<%= room.capacity %>"
+                    required
+                >
+
+            </div>
+
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Room Type</label>
+
+                <select name="room_type">
+
+                    <option
+                        value="General"
+                        <%= room.room_type === 'General' ? 'selected' : '' %>
+                    >
+                        General
+                    </option>
+
+                    <option
+                        value="Isolation"
+                        <%= room.room_type === 'Isolation' ? 'selected' : '' %>
+                    >
+                        Isolation
+                    </option>
+
+                    <option
+                        value="ICU"
+                        <%= room.room_type === 'ICU' ? 'selected' : '' %>
+                    >
+                        ICU
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Status</label>
+
+                <select name="availability_status">
+
+                    <option
+                        value="Available"
+                        <%= room.availability_status === 'Available' ? 'selected' : '' %>
+                    >
+                        Available
+                    </option>
+
+                    <option
+                        value="Occupied"
+                        <%= room.availability_status === 'Occupied' ? 'selected' : '' %>
+                    >
+                        Occupied
+                    </option>
+
+                    <option
+                        value="Maintenance"
+                        <%= room.availability_status === 'Maintenance' ? 'selected' : '' %>
+                    >
+                        Maintenance
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <button
+            type="submit"
+            class="btn"
+        >
+            Update Room
+        </button>
+
+    </form>
+
+</div>

@@ -1,0 +1,222 @@
+<div class="page-header">
+
+    <h2>Patients</h2>
+
+    <a href="/patients/add" class="btn">
+        Add Patient
+    </a>
+
+</div>
+
+
+
+
+
+
+
+
+
+<form
+    method="GET"
+    action="/patients"
+    class="filter-form"
+>
+
+    <div class="filter-grid">
+
+        <!-- SEARCH -->
+
+        <div class="search-wrapper">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search patients..."
+                value="<%= search %>"
+            >
+
+            <button
+                type="submit"
+                class="search-btn"
+            >
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+            </button>
+
+        </div>
+
+        <!-- STATUS FILTER -->
+
+        <select name="status">
+
+            <option value="">
+                All Statuses
+            </option>
+
+            <option
+                value="Waiting"
+                <%= status === 'Waiting'
+                    ? 'selected'
+                    : ''
+                %>
+            >
+                Waiting
+            </option>
+
+            <option
+                value="Isolated"
+                <%= status === 'Isolated'
+                    ? 'selected'
+                    : ''
+                %>
+            >
+                Isolated
+            </option>
+
+            <option
+                value="Discharged"
+                <%= status === 'Discharged'
+                    ? 'selected'
+                    : ''
+                %>
+            >
+                Discharged
+            </option>
+
+        </select>
+
+    </div>
+
+</form>
+
+
+
+
+
+<div class="table-container">
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Symptoms</th>
+                <th>Risk</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <% patients.forEach(patient => { %>
+
+
+                
+                <tr>
+
+                    <td data-label="Name">
+                        <%= patient.full_name %>
+                    </td>
+
+                    <td data-label="Age">
+                        <%= patient.age %>
+                    </td>
+
+                    <td data-label="Symptoms">
+                        <%= patient.symptoms %>
+                    </td>
+
+                    <td data-label="Risk">
+                        <%= patient.infection_risk %>
+                    </td>
+
+                    <td data-label="Priority">
+                        <%= patient.isolation_priority %>
+                    </td>
+
+                    <td data-label="Status">
+                        <%= patient.status %>
+                    </td>
+
+
+
+                    <td data-label="Actions">
+
+                        <div class="table-actions">
+
+                            <!-- ALL STAFF CAN EDIT -->
+
+                            <a
+                                href="/patients/edit/<%= patient.patient_id %>"
+                                class="btn"
+                            >
+                                Edit
+                            </a>
+
+                            <!-- ONLY ADMIN / HOSPITAL ADMIN CAN DELETE -->
+
+                            <% if (
+                                sessionUser &&
+                                (
+                                    sessionUser.role === 'hospital_admin' ||
+                                    sessionUser.role === 'admin'
+                                )
+                            ) { %>
+
+                                <form
+                                    action="/patients/delete/<%= patient.patient_id %>"
+                                    method="POST"
+                                    onsubmit="return confirm('Delete this patient?')"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="btn danger-btn"
+                                    >
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            <% } %>
+
+                        </div>
+
+                    </td>
+
+
+                </tr>
+
+
+            <% }) %>
+
+        </tbody>
+
+    </table>
+
+   
+
+<div class="pagination">
+
+    <% for(let i = 1; i <= totalPages; i++) { %>
+
+        <a
+            href="/patients?page=<%= i %>&search=<%= search %>&status=<%= status %>"
+            class="
+                pagination-btn
+                <%= currentPaginationPage === i ? 'active-page' : '' %>
+            "
+        >
+            <%= i %>
+        </a>
+
+    <% } %>
+
+</div>
+
+
+</div>
