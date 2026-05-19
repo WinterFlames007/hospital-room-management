@@ -1,0 +1,271 @@
+<div class="page-header">
+
+    <h2>Assignments</h2>
+
+    <a href="/assignments/add" class="btn">
+        Assign Patient
+    </a>
+
+</div>
+
+<!-- FILTER + SEARCH -->
+
+<form
+    method="GET"
+    action="/assignments"
+    class="filter-form"
+>
+
+    <div class="filter-grid">
+
+        <!-- SEARCH -->
+
+        <div class="search-wrapper">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search patient or room..."
+                value="<%= search %>"
+            >
+
+            <button type="submit">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+            </button>
+
+        </div>
+
+        <!-- STATUS -->
+
+        <select name="status">
+
+            <option value="">
+                All Statuses
+            </option>
+
+            <option
+                value="Active"
+                <%= status === 'Active'
+                    ? 'selected'
+                    : ''
+                %>
+            >
+                Active
+            </option>
+
+            <option
+                value="Completed"
+                <%= status === 'Completed'
+                    ? 'selected'
+                    : ''
+                %>
+            >
+                Completed
+            </option>
+
+        </select>
+
+        <!-- PRIORITY -->
+
+        <select name="priority">
+
+            <option value="">
+                All Priorities
+            </option>
+
+            <option
+                value="High"
+                <%= priority === 'High'
+                    ? 'selected'
+                    : ''
+                %>
+            >
+                High
+            </option>
+
+            <option
+                value="Medium"
+                <%= priority === 'Medium'
+                    ? 'selected'
+                    : ''
+                %>
+            >
+                Medium
+            </option>
+
+            <option
+                value="Low"
+                <%= priority === 'Low'
+                    ? 'selected'
+                    : ''
+                %>
+            >
+                Low
+            </option>
+
+        </select>
+
+    </div>
+
+</form>
+
+<!-- TABLE -->
+
+<div class="table-container">
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Patient</th>
+
+                <th>Room</th>
+
+                <th>Priority</th>
+
+                <th>Status</th>
+
+                <th>Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <% assignments.forEach(assignment => { %>
+
+                <tr>
+
+                    <td data-label="Patient">
+
+                        <%= assignment.patient_name %>
+
+                    </td>
+
+                    <td data-label="Room">
+
+                        <%= assignment.room_number %>
+
+                    </td>
+
+                    <td data-label="Priority">
+
+                        <span class="priority">
+
+                            <%= assignment.isolation_priority %>
+
+                        </span>
+
+                    </td>
+
+                    <td data-label="Status">
+
+                        <span class="status">
+
+                            <%= assignment.status %>
+
+                        </span>
+
+                    </td>
+
+                    <td data-label="Actions">
+
+                        <div class="assignment-actions table-actions">
+
+                            <% if (
+                                assignment.status === 'Active'
+                            ) { %>
+
+
+
+
+                            <% if (
+
+                                sessionUser.role === 'admin' ||
+
+                                sessionUser.role === 'hospital_admin' ||
+
+                                assignment.assigned_by === sessionUser.id
+
+                            ) { %>
+
+                            <a
+                                href="/assignments/edit/<%= assignment.assignment_id %>"
+                                class="btn"
+                            >
+
+                                Edit
+
+                            </a>
+
+                            <% } %>
+
+
+                                <a
+                                    href="/assignments/transfer/<%= assignment.assignment_id %>"
+                                    class="btn"
+                                >
+                                    Transfer
+                                </a>
+
+                                <form
+                                    action="/assignments/discharge/<%= assignment.assignment_id %>"
+                                    method="POST"
+                                    style="display:inline-block;"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="btn danger-btn"
+                                    >
+                                        Discharge
+                                    </button>
+
+                                </form>
+
+                            <% } else { %>
+
+                                <span>
+                                    Completed
+                                </span>
+
+                            <% } %>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            <% }) %>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<!-- PAGINATION -->
+
+<div class="pagination">
+
+    <% for(let i = 1; i <= totalPages; i++) { %>
+
+        <a
+            href="/assignments?page=<%= i %>&search=<%= search %>&status=<%= status %>&priority=<%= priority %>"
+            class="
+                pagination-btn
+                <%= currentPaginationPage === i ? 'active-page' : '' %>
+            "
+        >
+            <%= i %>
+        </a>
+
+    <% } %>
+
+</div>

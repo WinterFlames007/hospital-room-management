@@ -1,0 +1,112 @@
+<div class="page-header">
+
+    <div>
+
+        <h2>Hospital Reports</h2>
+
+        <p>
+            System analytics, reporting and hospital overview
+        </p>
+
+    </div>
+
+</div>
+
+<!-- REPORT STATS -->
+
+<div class="stats-grid">
+
+    <div class="stat-card blue">
+
+        <h3>Total Patients</h3>
+
+        <p>
+            <%= reports.totalPatients %>
+        </p>
+
+    </div>
+
+    <div class="stat-card orange">
+
+        <h3>Occupied Rooms</h3>
+
+        <p>
+            <%= reports.occupiedRooms %>
+        </p>
+
+    </div>
+
+    <div class="stat-card red">
+
+        <h3>High Priority Cases</h3>
+
+        <p>
+            <%= reports.highPriorityCases %>
+        </p>
+
+    </div>
+
+</div>
+
+<!-- EXPORT SECTION -->
+
+<% if (
+    sessionUser &&
+    (
+        sessionUser.role === 'admin' ||
+        sessionUser.role === 'hospital_admin'
+    )
+) { %>
+
+<div class="form-container">
+
+    <div class="report-export-header">
+
+        <h3>Export Reports</h3>
+
+        <p>
+            Download hospital system reports and analytics
+        </p>
+
+    </div>
+
+    <div class="export-buttons">
+
+        <a
+            href="/export/patients"
+            class="btn"
+        >
+
+            <i class="fa-solid fa-file-export"></i>
+
+            Export Patients
+
+        </a>
+
+        <a
+            href="/export/rooms"
+            class="btn"
+        >
+
+            <i class="fa-solid fa-file-export"></i>
+
+            Export Rooms
+
+        </a>
+
+        <a
+            href="/export/assignments"
+            class="btn"
+        >
+
+            <i class="fa-solid fa-file-export"></i>
+
+            Export Assignments
+
+        </a>
+
+    </div>
+
+</div>
+
+<% } %>

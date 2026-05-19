@@ -1,0 +1,116 @@
+<div class="auth-page">
+
+    <div class="auth-container">
+
+        <div class="auth-card">
+
+            <!-- HEADER -->
+
+            <div class="auth-header">
+
+                <div class="auth-logo">
+
+                    <i class="fa-solid fa-user-plus"></i>
+
+                </div>
+
+                <h1>Create Account</h1>
+
+            </div>
+
+            <!-- FORM -->
+
+            <form
+                action="/register"
+                method="POST"
+                class="auth-form"
+            >
+
+                <!-- FULL NAME -->
+
+                <div class="auth-input-group">
+
+                    <label>Full Name</label>
+
+                    <input
+                        type="text"
+                        name="full_name"
+                        placeholder="Enter full name"
+                        required
+                    >
+
+                </div>
+
+                <!-- EMAIL -->
+
+                <div class="auth-input-group">
+
+                    <label>Email Address</label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter email address"
+                        required
+                    >
+
+                </div>
+
+                <!-- PASSWORD -->
+
+                <div class="auth-input-group">
+
+                    <label>Password</label>
+
+                    <div class="password-group">
+
+                        <input
+                            type="password"
+                            name="password"
+                            id="registerPassword"
+                            placeholder="Enter password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('registerPassword')"
+                        >
+
+                            <i class="fa-solid fa-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- BUTTON -->
+
+                <button
+                    type="submit"
+                    class="btn auth-btn"
+                >
+                    Create Account
+                </button>
+
+            </form>
+
+            <!-- LINKS -->
+
+            <div class="auth-links">
+
+                <a href="/login">
+
+                    Already have an account?
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,536 @@
+<div class="dashboard-header">
+
+    <div class="dashboard-title-row">
+
+        <h2>Dashboard</h2>
+
+        <span class="dashboard-live-badge">
+
+            <span class="live-dot"></span>
+
+            Live
+
+        </span>
+
+    </div>
+    <p>Welcome back!</p>
+
+</div>
+
+
+
+
+
+<!-- DASHBOARD CARDS -->
+
+<div class="stats-grid">
+
+    <!-- TOTAL PATIENTS -->
+
+    <div class="stat-card blue">
+
+        <h3>Total Patients</h3>
+
+        <p id="totalPatients">
+            <%= totalPatients %>
+        </p>
+
+    </div>
+
+    <!-- AVAILABLE ROOMS -->
+
+    <div class="stat-card green">
+
+        <h3>Available Rooms</h3>
+
+        <p id="availableRooms">
+            <%= availableRooms %>
+        </p>
+
+    </div>
+
+    <!-- OCCUPIED ROOMS -->
+
+    <div class="stat-card orange">
+
+        <h3>Occupied Rooms</h3>
+
+        <p id="occupiedRooms">
+            <%= occupiedRooms %>
+        </p>
+
+    </div>
+
+    <!-- HIGH PRIORITY -->
+
+    <div class="stat-card red">
+
+        <h3>Isolation Cases</h3>
+
+        <p id="highPriorityCases">
+            <%= highPriorityCases %>
+        </p>
+
+    </div>
+
+    <!-- ACTIVE ASSIGNMENTS -->
+
+    <div class="stat-card blue">
+
+        <h3>Active Assignments</h3>
+
+        <p>
+            <%= activeAssignments %>
+        </p>
+
+    </div>
+
+    <!-- COMPLETED ASSIGNMENTS -->
+
+    <div class="stat-card green">
+
+        <h3>Completed Assignments</h3>
+
+        <p>
+            <%= completedAssignments %>
+        </p>
+
+    </div>
+
+    <!-- OCCUPANCY RATE -->
+
+    <div class="stat-card orange">
+
+        <h3>Occupancy Rate</h3>
+
+        <p>
+            <%= occupancyRate %>%
+        </p>
+
+    </div>
+
+    <!-- TOTAL ROOMS -->
+
+    <div class="stat-card red">
+
+        <h3>Total Rooms</h3>
+
+        <p>
+            <%= totalRooms %>
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- ANALYTICS GRID -->
+
+<div class="analytics-grid">
+
+    <!-- ROOM STATUS -->
+
+    <div class="chart-card">
+
+        <div class="chart-header">
+
+            <h3>Room Availability</h3>
+
+        </div>
+
+        
+        <div class="chart-container">
+
+            <canvas id="roomChart"></canvas>
+
+        </div>
+
+
+    </div>
+
+    <!-- PRIORITY STATUS -->
+
+    <div class="chart-card">
+
+        <div class="chart-header">
+
+            <h3>Isolation Priorities</h3>
+
+        </div>
+
+       
+
+        <div class="chart-container">
+
+            <canvas id="priorityChart"></canvas>
+
+        </div>
+        
+
+    </div>
+
+</div>
+
+
+
+<div class="activity-feed-card">
+
+    <div class="activity-header">
+
+        <h3>Recent Activity</h3>
+
+        <span class="live-badge">
+            LIVE
+        </span>
+
+    </div>
+
+    <div class="activity-feed">
+
+        <% (activities || []).forEach(activity => { %>
+
+            <div class="activity-item">
+
+                <div class="activity-icon">
+
+                    <i class="fa-solid fa-bolt"></i>
+
+                </div>
+
+                <div class="activity-content">
+
+                    <h4>
+                        <%= activity.activity_type %>
+                    </h4>
+
+                    <p>
+                        <%= activity.description %>
+                    </p>
+
+                    <span>
+                        <%= activity.full_name || 'System' %>
+                    </span>
+
+                </div>
+
+            </div>
+
+        <% }) %>
+
+    </div>
+
+</div>
+
+
+
+
+<!-- QUICK WIDGETS -->
+
+<div class="widget-grid">
+
+    <div class="widget-card">
+
+        <h4>Active Staff</h4>
+
+        
+        <p>
+            <%= activeStaff %> Staff Online
+        </p>
+    </div>
+
+
+
+    <!-- ROOM ACCESS -->
+
+    <div
+        class="widget-card clickable-widget"
+        onclick="window.location.href='/rooms'"
+    >
+
+        <% if (
+
+            sessionUser.role === 'admin' ||
+
+            sessionUser.role === 'hospital_admin'
+
+        ) { %>
+
+            <h4>Room Management</h4>
+
+            <p>Create and manage hospital rooms</p>
+
+        <% } else { %>
+
+            <h4>View Rooms</h4>
+
+            <p>View available hospital rooms</p>
+
+        <% } %>
+
+    </div>
+
+
+
+    <div class="widget-card">
+
+        <h4>Critical Alerts</h4>
+
+        <p>
+            <%= highPriorityCases %> High Risk Patients
+        </p>
+
+    </div>
+
+
+
+    <div class="widget-card">
+
+        <h4>Hospital Capacity</h4>
+
+        <p>
+            <%= occupancyRate %>% Occupied
+        </p>
+
+    </div>
+
+
+
+</div>
+
+<!-- ASSIGNMENT TABLE -->
+
+<div class="table-container">
+
+    <h3>Recent Patient Assignments</h3>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Patient</th>
+
+                <th>Room</th>
+
+                <th>Priority</th>
+
+                <th>Status</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <% assignments.forEach(assignment => { %>
+
+                <tr>
+
+                    <td data-label="Patient">
+
+                        <%= assignment.patient_name %>
+
+                    </td>
+
+                    <td data-label="Room">
+
+                        <%= assignment.room_number %>
+
+                    </td>
+
+                    <td data-label="Priority">
+
+                        <span class="priority">
+
+                            <%= assignment.isolation_priority %>
+
+                        </span>
+
+                    </td>
+
+                    <td data-label="Status">
+
+                        <span class="status">
+
+                            <%= assignment.status %>
+
+                        </span>
+
+                    </td>
+
+                </tr>
+
+            <% }) %>
+
+        </tbody>
+
+    </table>
+
+</div>
+<!-- CHART JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+    /* =========================================
+       SAFE VALUES
+    ========================================= */
+
+    const availableRooms =
+        Number("<%= availableRooms || 0 %>");
+
+    const occupiedRooms =
+        Number("<%= occupiedRooms || 0 %>");
+
+    const maintenanceRooms =
+        Number("<%= maintenanceRooms || 0 %>");
+
+    const lowPriorityCount =
+        Number("<%= lowPriorityCount || 0 %>");
+
+    const mediumPriorityCount =
+        Number("<%= mediumPriorityCount || 0 %>");
+
+    const highPriorityCount =
+        Number("<%= highPriorityCount || 0 %>");
+
+
+    /* =========================================
+       ROOM AVAILABILITY CHART
+    ========================================= */
+
+    const roomChartCanvas =
+        document.getElementById('roomChart');
+
+    if (roomChartCanvas) {
+
+        new Chart(
+            roomChartCanvas,
+            {
+
+                type: 'doughnut',
+
+                data: {
+
+                    labels: [
+                        'Available',
+                        'Occupied',
+                        'Maintenance'
+                    ],
+
+                    datasets: [{
+
+                        data: [
+                            availableRooms,
+                            occupiedRooms,
+                            maintenanceRooms
+                        ],
+
+                        backgroundColor: [
+                            '#16a34a',
+                            '#2563eb',
+                            '#f59e0b'
+                        ],
+
+                        borderWidth: 0
+                    }]
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+
+                            position: 'bottom',
+
+                            labels: {
+
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            }
+        );
+    }
+
+
+    /* =========================================
+       PRIORITY CHART
+    ========================================= */
+
+    const priorityChartCanvas =
+        document.getElementById('priorityChart');
+
+    if (priorityChartCanvas) {
+
+        new Chart(
+            priorityChartCanvas,
+            {
+
+                type: 'bar',
+
+                data: {
+
+                    labels: [
+                        'Low',
+                        'Medium',
+                        'High'
+                    ],
+
+                    datasets: [{
+
+                        label: 'Patients',
+
+                        data: [
+                            lowPriorityCount,
+                            mediumPriorityCount,
+                            highPriorityCount
+                        ],
+
+                        backgroundColor: [
+                            '#16a34a',
+                            '#f59e0b',
+                            '#dc2626'
+                        ],
+
+                        borderRadius: 10
+                    }]
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+                            display: false
+                        }
+                    },
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            }
+        );
+    }
+
+</script>

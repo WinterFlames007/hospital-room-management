@@ -1,0 +1,255 @@
+<div class="page-header">
+
+    <h2>Rooms</h2>
+
+    <form
+        method="GET"
+        action="/rooms"
+        class="filter-form"
+    >
+
+        <div class="filter-grid">
+
+            <!-- SEARCH -->
+
+            <div class="search-wrapper">
+
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search room number..."
+                    value="<%= search %>"
+                >
+
+                <button type="submit">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                </button>
+
+            </div>
+
+            <!-- ROOM TYPE -->
+
+            <select name="room_type">
+
+                <option value="">
+                    All Room Types
+                </option>
+
+                <option
+                    value="General"
+                    <%= roomType === 'General'
+                        ? 'selected'
+                        : ''
+                    %>
+                >
+                    General
+                </option>
+
+                <option
+                    value="Isolation"
+                    <%= roomType === 'Isolation'
+                        ? 'selected'
+                        : ''
+                    %>
+                >
+                    Isolation
+                </option>
+
+                <option
+                    value="ICU"
+                    <%= roomType === 'ICU'
+                        ? 'selected'
+                        : ''
+                    %>
+                >
+                    ICU
+                </option>
+
+            </select>
+
+            <!-- STATUS -->
+
+            <select
+                name="availability_status"
+            >
+
+                <option value="">
+                    All Statuses
+                </option>
+
+                <option
+                    value="Available"
+                    <%= availability === 'Available'
+                        ? 'selected'
+                        : ''
+                    %>
+                >
+                    Available
+                </option>
+
+                <option
+                    value="Occupied"
+                    <%= availability === 'Occupied'
+                        ? 'selected'
+                        : ''
+                    %>
+                >
+                    Occupied
+                </option>
+
+                <option
+                    value="Maintenance"
+                    <%= availability === 'Maintenance'
+                        ? 'selected'
+                        : ''
+                    %>
+                >
+                    Maintenance
+                </option>
+
+            </select>
+
+        </div>
+
+    </form>
+
+
+    
+
+
+    <% if (
+
+        sessionUser.role === 'admin' ||
+
+        sessionUser.role === 'hospital_admin'
+
+    ) { %>
+
+    <a href="/rooms/add" class="btn">
+
+        Add Room
+
+    </a>
+
+    <% } %>
+
+
+</div>
+
+
+
+<div class="table-container">
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Room Number</th>
+                <th>Room Type</th>
+                <th>Status</th>
+                <th>Capacity</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <% rooms.forEach(room => { %>
+
+                <tr>
+
+
+
+                    <td data-label="Room Number">
+                        <%= room.room_number %>
+                    </td>
+
+
+                    <td data-label="Room Type">
+                        <%= room.room_type %>
+                    </td>
+
+                    <td data-label="Status">
+                        <%= room.availability_status %>
+                    </td>
+
+                    <td data-label="Capacity">
+                        <%= room.capacity %>
+                    </td>
+
+
+
+
+                    <td data-label="Actions">
+
+
+                        <div class="table-actions">
+
+                            <% if (
+                                sessionUser &&
+                                (
+                                    sessionUser.role === 'hospital_admin' ||
+                                    sessionUser.role === 'admin'
+                                )
+                            ) { %>
+
+                                <a
+                                    href="/rooms/edit/<%= room.room_id %>"
+                                    class="btn"
+                                >
+                                    Edit
+                                </a>
+
+                                <form
+                                    action="/rooms/delete/<%= room.room_id %>"
+                                    method="POST"
+                                    onsubmit="return confirm('Delete this room?')"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="btn danger-btn"
+                                    >
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            <% } %>
+
+                        </div>
+
+                    </td>
+
+
+
+                </tr>
+
+            <% }) %>
+
+        </tbody>
+
+    </table>
+
+    <div class="pagination">
+
+        <% for(let i = 1; i <= totalPages; i++) { %>
+
+            <a
+                href="/rooms?page=<%= i %>&search=<%= search %>&room_type=<%= roomType %>&availability_status=<%= availability %>"
+                class="
+                    pagination-btn
+                    <%= currentPaginationPage === i ? 'active-page' : '' %>
+                "
+            >
+                <%= i %>
+            </a>
+
+        <% } %>
+
+    </div>
+
+
+</div>
