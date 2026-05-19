@@ -267,6 +267,8 @@ app.use((err, req, res, next) => {
    SERVER
 ========================================= */
 
+
+
 /* =========================================
    PROCESS ERROR HANDLING
 ========================================= */
@@ -302,16 +304,4 @@ app.listen(PORT, () => {
         `Server running on port ${PORT}`
     );
 
-});
-
-
-
-const PORT =
-    process.env.PORT || 3040;
-
-app.listen(PORT, () => {
-
-    console.log(
-        `Server running on port ${PORT}`
-    );
 });
