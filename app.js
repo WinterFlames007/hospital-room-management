@@ -267,6 +267,45 @@ app.use((err, req, res, next) => {
    SERVER
 ========================================= */
 
+/* =========================================
+   PROCESS ERROR HANDLING
+========================================= */
+
+process.on('uncaughtException', (err) => {
+
+    console.error(
+        'UNCAUGHT EXCEPTION:',
+        err
+    );
+
+});
+
+process.on('unhandledRejection', (err) => {
+
+    console.error(
+        'UNHANDLED REJECTION:',
+        err
+    );
+
+});
+
+/* =========================================
+   SERVER
+========================================= */
+
+const PORT =
+    process.env.PORT || 3040;
+
+app.listen(PORT, () => {
+
+    console.log(
+        `Server running on port ${PORT}`
+    );
+
+});
+
+
+
 const PORT =
     process.env.PORT || 3040;
 
