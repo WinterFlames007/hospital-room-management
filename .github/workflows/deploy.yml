@@ -52,9 +52,9 @@ jobs:
             export PATH=$PATH:/usr/bin:/usr/local/bin
 
             cd /home/s2209682-node/htdocs/s2209682n.ncgrp.xyz/Cloud/hospital-room-management
-            
-             rm -rf node_modules
 
-            /usr/bin//usr/bin/npm install --omit=dev --no-fund --no-audit
+            rm -rf node_modules
 
-            /usr/local/bin/pm2 restart hospital-system || /usr/local/bin/pm2 start app.js --name hospital-system
+            /usr/bin/npm install --omit=dev --no-fund --no-audit
+
+            pm2 restart hospital-system || pm2 start app.js --name hospital-system
