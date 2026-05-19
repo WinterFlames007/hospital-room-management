@@ -60,6 +60,8 @@ jobs:
 
             set -e
 
+            export PATH=$PATH:/usr/bin:/usr/local/bin
+
             APP_DIR="/home/s2209682-node/htdocs/s2209682n.ncgrp.xyz/Cloud/hospital-room-management"
 
             CONTAINER_NAME="hospital-system"
@@ -68,13 +70,21 @@ jobs:
 
             cd "$APP_DIR"
 
-            echo "Current directory:"
+            echo "========================================="
+            echo "CURRENT DIRECTORY"
+            echo "========================================="
+
             pwd
 
-            echo "Files:"
+            echo "========================================="
+            echo "PROJECT FILES"
+            echo "========================================="
+
             ls -la
 
+            # =========================================
             # VERIFY DOCKERFILE EXISTS
+            # =========================================
 
             if [ ! -f Dockerfile ]; then
 
@@ -84,24 +94,55 @@ jobs:
 
             fi
 
+            # =========================================
             # STOP OLD CONTAINER
+            # =========================================
 
             docker stop "$CONTAINER_NAME" || true
 
             docker rm "$CONTAINER_NAME" || true
 
+            # =========================================
             # REMOVE OLD IMAGE
+            # =========================================
 
             docker rmi "$IMAGE_NAME" || true
 
+            # =========================================
+            # CLEAN UNUSED DOCKER FILES
+            # =========================================
+
+            docker system prune -f || true
+
+            # =========================================
             # BUILD NEW IMAGE
+            # =========================================
 
             docker build -t "$IMAGE_NAME" .
 
+            # =========================================
             # START NEW CONTAINER
+            # =========================================
 
             docker run -d \
               --name "$CONTAINER_NAME" \
               --restart unless-stopped \
+              --env-file .env \
               -p 3040:3040 \
               "$IMAGE_NAME"
+
+            # =========================================
+            # VERIFY RUNNING CONTAINER
+            # =========================================
+
+            echo "========================================="
+            echo "RUNNING CONTAINERS"
+            echo "========================================="
+
+            docker ps
+
+            echo "========================================="
+            echo "CONTAINER LOGS"
+            echo "========================================="
+
+            docker logs "$CONTAINER_NAME"
