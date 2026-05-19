@@ -29,7 +29,7 @@ This provides visibility into:
 
 ---
 
-## Error Handling
+## Error Handlin
 
 Global error handlers were implemented to capture:
 
