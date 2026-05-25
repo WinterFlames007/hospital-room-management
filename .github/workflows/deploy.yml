@@ -24,6 +24,7 @@ jobs:
           source: "./*"
           target: "/home/s2209682-node/htdocs/s2209682n.ncgrp.xyz/Cloud/hospital-room-management"
           strip_components: 1
+          overwrite: true
 
       - name: Build and restart Docker container
         uses: appleboy/ssh-action@v1.0.3
