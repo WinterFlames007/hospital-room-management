@@ -1,4 +1,3 @@
-cat > .github/workflows/deploy.yml <<'EOF'
 name: Hospital Management Docker CI/CD
 
 on:
@@ -36,6 +35,8 @@ jobs:
           script: |
             set -e
 
+            export PATH=$PATH:/usr/bin:/usr/local/bin:/home/s2209682-node/.nvm/versions/node/v22.22.0/bin
+
             APP_DIR="/home/s2209682-node/htdocs/s2209682n.ncgrp.xyz/Cloud/hospital-room-management"
             CONTAINER_NAME="hospital-system"
             IMAGE_NAME="hospital-system:latest"
@@ -43,36 +44,46 @@ jobs:
 
             cd "$APP_DIR"
 
+            echo "CURRENT DIRECTORY"
+            pwd
+
+            echo "PROJECT FILES"
+            ls -la
+
             if [ ! -f Dockerfile ]; then
               echo "ERROR: Dockerfile not found"
               exit 1
             fi
 
-            echo "Stopping PM2 app if running..."
+            echo "STOP PM2 APP IF RUNNING"
             pm2 stop hospital-management || true
             pm2 delete hospital-management || true
 
-            echo "Stopping old Docker container..."
+            echo "STOP OLD DOCKER CONTAINER"
             docker stop "$CONTAINER_NAME" || true
             docker rm "$CONTAINER_NAME" || true
 
-            echo "Removing containers using port $APP_PORT..."
+            echo "REMOVE CONTAINERS USING PORT $APP_PORT"
             PORT_CONTAINERS=$(docker ps -aq --filter "publish=${APP_PORT}")
             if [ -n "$PORT_CONTAINERS" ]; then
               docker stop $PORT_CONTAINERS || true
               docker rm $PORT_CONTAINERS || true
             fi
 
-            echo "Freeing port $APP_PORT..."
+            echo "FREE PORT $APP_PORT"
             fuser -k "${APP_PORT}/tcp" || true
+            sleep 3
 
-            echo "Removing old image..."
+            echo "CHECK PORT"
+            netstat -tulpn | grep "$APP_PORT" || true
+
+            echo "REMOVE OLD IMAGE"
             docker rmi "$IMAGE_NAME" || true
 
-            echo "Building image..."
+            echo "BUILD NEW IMAGE"
             docker build -t "$IMAGE_NAME" .
 
-            echo "Starting container..."
+            echo "START NEW CONTAINER"
             docker run -d \
               --name "$CONTAINER_NAME" \
               --restart unless-stopped \
@@ -80,6 +91,6 @@ jobs:
               -p "${APP_PORT}:${APP_PORT}" \
               "$IMAGE_NAME"
 
+            echo "VERIFY CONTAINER"
             docker ps
             docker logs "$CONTAINER_NAME"
-EOF
