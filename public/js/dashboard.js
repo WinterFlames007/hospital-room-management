@@ -536,6 +536,7 @@ const transition =
         'pageTransition'
     );
 
+
 if (transition) {
 
     document.querySelectorAll('a').forEach(link => {
@@ -548,28 +549,44 @@ if (transition) {
                     this.getAttribute('href');
 
                 if (
-                    href &&
-                    !href.startsWith('#') &&
-                    !href.startsWith('javascript')
+                    !href ||
+                    href.startsWith('#') ||
+                    href.startsWith('javascript') ||
+                    this.target === '_blank'
                 ) {
-
-                    e.preventDefault();
-
-                    transition.classList.add(
-                        'active'
-                    );
-
-                    setTimeout(() => {
-
-                        window.location.href =
-                            href;
-
-                    }, 300);
+                    return;
                 }
+
+                const currentPath =
+                    window.location.pathname;
+
+                const targetPath =
+                    new URL(
+                        href,
+                        window.location.origin
+                    ).pathname;
+
+                if (currentPath === targetPath) {
+                    return;
+                }
+
+                e.preventDefault();
+
+                transition.classList.add(
+                    'active'
+                );
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        href;
+
+                }, 300);
             }
         );
     });
 }
+
 
 
 async function refreshDashboardStats() {
