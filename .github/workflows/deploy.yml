@@ -15,25 +15,13 @@ jobs:
 
     steps:
 
-      # =========================================
-      # CHECKOUT REPOSITORY
-      # =========================================
-
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      # =========================================
-      # REMOVE .GIT BEFORE DEPLOY
-      # =========================================
 
       - name: Remove Git metadata
         run: |
           rm -rf .git
           rm -rf .github
-
-      # =========================================
-      # UPLOAD FILES TO SERVER
-      # =========================================
 
       - name: Upload project files to server
         uses: appleboy/scp-action@v0.1.7
@@ -44,16 +32,9 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
 
           port: 22
-
           source: "./*"
-
           target: "/home/s2209682-node/htdocs/s2209682n.ncgrp.xyz/Cloud/hospital-room-management"
-
           strip_components: 1
-
-      # =========================================
-      # BUILD & RESTART DOCKER CONTAINER
-      # =========================================
 
       - name: Build and restart Docker container
         uses: appleboy/ssh-action@v1.0.3
@@ -70,67 +51,62 @@ jobs:
             set -e
 
             APP_DIR="/home/s2209682-node/htdocs/s2209682n.ncgrp.xyz/Cloud/hospital-room-management"
-
             CONTAINER_NAME="hospital-system"
-
             IMAGE_NAME="hospital-system:latest"
+            APP_PORT="3040"
 
             cd "$APP_DIR"
 
             echo "========================================="
             echo "CURRENT DIRECTORY"
             echo "========================================="
-
             pwd
 
             echo "========================================="
             echo "PROJECT FILES"
             echo "========================================="
-
             ls -la
 
-            # =========================================
-            # VERIFY DOCKERFILE EXISTS
-            # =========================================
-
             if [ ! -f Dockerfile ]; then
-
               echo "ERROR: Dockerfile not found"
-
               exit 1
-
             fi
 
-            # =========================================
-            # STOP OLD CONTAINER
-            # =========================================
+            echo "========================================="
+            echo "STOP PM2 APP IF RUNNING"
+            echo "========================================="
+            pm2 stop hospital-management || true
+            pm2 delete hospital-management || true
 
+            echo "========================================="
+            echo "STOP OLD DOCKER CONTAINER"
+            echo "========================================="
             docker stop "$CONTAINER_NAME" || true
-
             docker rm "$CONTAINER_NAME" || true
 
-            # =========================================
-            # REMOVE OLD IMAGE
-            # =========================================
+            echo "========================================="
+            echo "FREE PORT 3040 IF STILL IN USE"
+            echo "========================================="
+            fuser -k "${APP_PORT}/tcp" || true
 
+            echo "========================================="
+            echo "REMOVE OLD IMAGE"
+            echo "========================================="
             docker rmi "$IMAGE_NAME" || true
 
-            # =========================================
-            # CLEAN DOCKER CACHE
-            # =========================================
-
+            echo "========================================="
+            echo "CLEAN DOCKER CACHE"
+            echo "========================================="
             docker system prune -f || true
 
-            # =========================================
-            # BUILD NEW IMAGE
-            # =========================================
-
+            echo "========================================="
+            echo "BUILD NEW IMAGE"
+            echo "========================================="
             docker build -t "$IMAGE_NAME" .
 
-            # =========================================
-            # START NEW CONTAINER
-            # =========================================
-
+            echo "========================================="
+            echo "START NEW CONTAINER"
+            echo "========================================="
             docker run -d \
               --name "$CONTAINER_NAME" \
               --restart unless-stopped \
@@ -138,10 +114,8 @@ jobs:
               -p 3040:3040 \
               "$IMAGE_NAME"
 
-            # =========================================
-            # VERIFY CONTAINER
-            # =========================================
-
+            echo "========================================="
+            echo "VERIFY CONTAINER"
+            echo "========================================="
             docker ps
-
             docker logs "$CONTAINER_NAME"
