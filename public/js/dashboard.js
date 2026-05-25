@@ -809,3 +809,30 @@ function togglePassword(inputId) {
         }
     }
 }
+
+
+/* =========================================
+   AUTO SUBMIT FILTERS
+========================================= */
+
+const filterForms =
+    document.querySelectorAll(
+        '.filter-form'
+    );
+
+filterForms.forEach((form) => {
+
+    const selects =
+        form.querySelectorAll('select');
+
+    selects.forEach((select) => {
+
+        select.addEventListener(
+            'change',
+            () => {
+
+                form.submit();
+            }
+        );
+    });
+});
