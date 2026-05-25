@@ -4701,21 +4701,26 @@ tbody tr:last-child td {
    NOTIFICATION LIST
 ========================================= */
 
+
 .notification-list {
 
-    max-height: 420px;
+    max-height: 360px;
 
     overflow-y: auto;
+
+    overflow-x: hidden;
 
     display: flex;
 
     flex-direction: column;
-}
 
+    padding-bottom: 10px;
+}
 
 /* =========================================
    NOTIFICATION ITEM
 ========================================= */
+
 
 .notification-item {
 
@@ -4727,6 +4732,8 @@ tbody tr:last-child td {
 
     display: flex;
 
+    flex-direction: column;
+
     gap: 14px;
 
     align-items: flex-start;
@@ -4734,7 +4741,11 @@ tbody tr:last-child td {
     width: 100%;
 
     overflow: hidden;
+
+    flex-shrink: 0;
 }
+
+
 
 .notification-item:last-child {
 
