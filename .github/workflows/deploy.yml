@@ -1,3 +1,4 @@
+cat > .github/workflows/deploy.yml <<'EOF'
 name: Hospital Management Docker CI/CD
 
 on:
@@ -47,23 +48,23 @@ jobs:
               exit 1
             fi
 
-            echo "Stopping old named container..."
+            echo "Stopping PM2 app if running..."
+            pm2 stop hospital-management || true
+            pm2 delete hospital-management || true
+
+            echo "Stopping old Docker container..."
             docker stop "$CONTAINER_NAME" || true
             docker rm "$CONTAINER_NAME" || true
 
-            echo "Removing any container using port $APP_PORT..."
+            echo "Removing containers using port $APP_PORT..."
             PORT_CONTAINERS=$(docker ps -aq --filter "publish=${APP_PORT}")
-
             if [ -n "$PORT_CONTAINERS" ]; then
               docker stop $PORT_CONTAINERS || true
               docker rm $PORT_CONTAINERS || true
             fi
 
-            echo "Killing any remaining process on port $APP_PORT..."
-            sudo fuser -k "${APP_PORT}/tcp" || true
-
-            echo "Checking port..."
-            netstat -tulpn | grep "$APP_PORT" || true
+            echo "Freeing port $APP_PORT..."
+            fuser -k "${APP_PORT}/tcp" || true
 
             echo "Removing old image..."
             docker rmi "$IMAGE_NAME" || true
@@ -79,8 +80,6 @@ jobs:
               -p "${APP_PORT}:${APP_PORT}" \
               "$IMAGE_NAME"
 
-            echo "Container status:"
             docker ps
-
-            echo "Container logs:"
             docker logs "$CONTAINER_NAME"
+EOF
