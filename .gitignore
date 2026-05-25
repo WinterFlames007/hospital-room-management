@@ -5,4 +5,4 @@ testing/screenshots/
 
 .vscode/
 .DS_Store
-npm-debug.log
+npm-debug.lognode_modules/
