@@ -19,7 +19,7 @@ const getDashboard = (req, res) => {
 
                 console.log(err);
 
-                return res.send('Database Error');
+                return res.send('Database Patient Error '  + err.message);
             }
 
             dashboardData.totalPatients =
@@ -40,7 +40,7 @@ const getDashboard = (req, res) => {
 
                         console.log(err);
 
-                        return res.send('Database Error');
+                        return res.send('Database Room Error' + err.message);
                     }
 
                     dashboardData.totalRooms =
@@ -63,7 +63,7 @@ const getDashboard = (req, res) => {
                                 console.log(err);
 
                                 return res.send(
-                                    'Database Error'
+                                    'Database Active Staff Error' + err.message
                                 );
                             }
 
@@ -86,7 +86,7 @@ const getDashboard = (req, res) => {
 
                                         console.log(err);
 
-                                        return res.send('Database Error');
+                                        return res.send('Database Available Room Error' + err.message);
                                     }
 
                                     dashboardData.availableRooms =
@@ -108,7 +108,7 @@ const getDashboard = (req, res) => {
 
                                                 console.log(err);
 
-                                                return res.send('Database Error');
+                                                return res.send('Database Occupied Room Error' + err.message);
                                             }
 
                                             dashboardData.occupiedRooms =
@@ -130,7 +130,7 @@ const getDashboard = (req, res) => {
 
                                                         console.log(err);
 
-                                                        return res.send('Database Error');
+                                                        return res.send('Database Maintenance Error' + err.message);
                                                     }
 
                                                     dashboardData.maintenanceRooms =
@@ -152,7 +152,7 @@ const getDashboard = (req, res) => {
 
                                                                 console.log(err);
 
-                                                                return res.send('Database Error');
+                                                                return res.send('Database Priotiry Error'  + err.message);
                                                             }
 
                                                             dashboardData.highPriorityCases =
@@ -176,7 +176,7 @@ const getDashboard = (req, res) => {
 
                                                                         console.log(err);
 
-                                                                        return res.send('Database Error');
+                                                                        return res.send('Database Isolation Error'  + err.message);
                                                                     }
 
                                                                     let lowCount = 0;
@@ -232,7 +232,7 @@ const getDashboard = (req, res) => {
 
                                                                                 console.log(err);
 
-                                                                                return res.send('Database Error');
+                                                                                return res.send('Database Active Assignment Error' + err.message);
                                                                             }
 
                                                                             dashboardData.activeAssignments =
@@ -254,7 +254,7 @@ const getDashboard = (req, res) => {
 
                                                                                         console.log(err);
 
-                                                                                        return res.send('Database Error');
+                                                                                        return res.send('Database Complete Assignment Error' + err.message);
                                                                                     }
 
                                                                                     dashboardData.completedAssignments =
@@ -306,7 +306,7 @@ const getDashboard = (req, res) => {
 
                                                                                                 console.log(err);
 
-                                                                                                return res.send('Database Error');
+                                                                                                return res.send('Database Assignemnt Query Error' + err.message);
                                                                                             }
 
                                                                                             dashboardData.assignments =
@@ -320,12 +320,13 @@ const getDashboard = (req, res) => {
                                                                                                 role_target = 'all'
                                                                                             `;
 
+
                                                                                             if (
                                                                                                 req.session.user.role === 'hospital_admin'
                                                                                             ) {
 
                                                                                                 activityCondition += `
-                                                                                                    OR role_target = 'management'
+                                                                                                    OR role_target = 'hospital_admin'
                                                                                                 `;
                                                                                             }
 
@@ -334,8 +335,9 @@ const getDashboard = (req, res) => {
                                                                                             ) {
 
                                                                                                 activityCondition += `
-                                                                                                    OR role_target = 'management'
                                                                                                     OR role_target = 'admin'
+                                                                                                    OR role_target = 'hospital_admin'
+                                                                                                    OR role_target = 'staff'
                                                                                                 `;
                                                                                             }
 
@@ -389,7 +391,7 @@ const getDashboard = (req, res) => {
                                                                                                                 console.log(err);
 
                                                                                                                 return res.send(
-                                                                                                                    'Notification Error'
+                                                                                                                    'Notification Error' + err.message
                                                                                                                 );
                                                                                                             }
 

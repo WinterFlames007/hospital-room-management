@@ -152,7 +152,7 @@ const forgotPassword = (req, res) => {
             console.log(err);
 
             return res.send(
-                'Database Error'
+                'Database Error: ' + err.message
             );
         }
 
