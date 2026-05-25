@@ -63,7 +63,7 @@ jobs:
             sudo fuser -k "${APP_PORT}/tcp" || true
 
             echo "Checking port..."
-            sudo lsof -i :"$APP_PORT" || true
+            netstat -tulpn | grep "$APP_PORT" || true
 
             echo "Removing old image..."
             docker rmi "$IMAGE_NAME" || true
