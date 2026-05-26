@@ -224,7 +224,7 @@ const changeEmail = (req, res) => {
             }
 
             const verifyLink =
-`https://s2209682n.ncgrp.xyz/profile/verify-email/${token}`;
+            `http://s2209682n.ncgrp.xyz:3040/profile/verify-email/${token}`;
 
             console.log(
                 'VERIFY EMAIL LINK:',
