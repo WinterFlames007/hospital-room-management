@@ -192,7 +192,7 @@ const changeEmail = (req, res) => {
 
     const expiry =
         new Date(
-            Date.now() + 3600000
+            Date.now() + (3 * 60 * 60 * 1000)
         );
 
     const sql = `
