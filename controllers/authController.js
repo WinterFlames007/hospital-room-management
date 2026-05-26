@@ -179,7 +179,7 @@ const forgotPassword = (req, res) => {
 
         const expiry =
             new Date(
-                Date.now() + 3600000
+                Date.now() + (3 * 60 * 60 * 1000)
             );
 
         const updateSql = `
@@ -204,8 +204,13 @@ const forgotPassword = (req, res) => {
                     );
                 }
 
+
+                const baseUrl =
+                    process.env.BASE_URL || 'http://localhost:3040';
+
                 const resetLink =
-`https://s2209682n.ncgrp.xyz/reset-password/${token}`;
+                `${baseUrl}/reset-password/${token}`;
+
 
                 console.log(
                     'RESET LINK:',
