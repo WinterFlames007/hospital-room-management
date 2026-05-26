@@ -2290,11 +2290,9 @@ tbody tr:last-child td {
     }
 
 
+    tbody tr td:not(:last-child) {
 
-    
-    tbody td:last-child {
-
-        border-bottom: none;
+        border-bottom: 1px solid #f1f5f9;
     }
 
     tbody td::before {
