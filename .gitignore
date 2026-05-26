@@ -37,6 +37,10 @@ npm-debug.log
 /userController.js
 /userRoutes.js
 
+
+
+
+
 # Root-level duplicate folders only
 /alerts/
 /assignments/
@@ -53,3 +57,4 @@ npm-debug.log
 /rooms/
 /users/
 EOF
+coverage/
