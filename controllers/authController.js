@@ -21,6 +21,16 @@ const loginUser = (req, res) => {
     const password =
         req.body.password;
 
+
+
+
+    if (!email || !password) {
+
+        return res.status(400).send(
+            'Email and password are required'
+        );
+    }
+
     const sql =
         'SELECT * FROM users WHERE email=?';
 
