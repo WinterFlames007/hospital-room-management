@@ -33,7 +33,7 @@ describe('Login Route Tests', () => {
         const response = await request(app)
             .post('/login')
             .send({
-                email: 'admin@hospital.com',
+                email: 'staff@hospital.com',
                 password: 'wrongpassword'
             });
 
