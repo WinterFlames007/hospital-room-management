@@ -14,11 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: npm install
 
-      - name: Run automated tests
-        run: npm test
 
       - name: Upload project files to server
         uses: appleboy/scp-action@v0.1.7
@@ -86,6 +82,11 @@ jobs:
 
             echo "REMOVE OLD IMAGE"
             docker rmi "$IMAGE_NAME" || true
+
+
+            echo "RUN AUTOMATED TESTS ON SERVER"
+            npm install
+            npm test
 
             echo "BUILD NEW IMAGE"
             docker build -t "$IMAGE_NAME" .
