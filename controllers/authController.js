@@ -220,15 +220,18 @@ const forgotPassword = (req, res) => {
     });
 };
 
+
 const showResetPassword = (req, res) => {
 
     res.render(
         'auth/reset-password',
         {
-            layout: 'layouts/auth'
+            layout: 'layouts/auth',
+            token: req.params.token
         }
     );
 };
+
 
 const resetPassword = async (req, res) => {
 
