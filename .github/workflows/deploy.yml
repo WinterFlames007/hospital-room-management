@@ -1,6 +1,6 @@
 name: Hospital Management Docker CI/CD
 
-on:
+"on":
   push:
     branches:
       - main
