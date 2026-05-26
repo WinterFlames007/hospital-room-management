@@ -82,10 +82,13 @@ jobs:
             docker build -t "$IMAGE_NAME" .
 
             echo "START NEW CONTAINER"
+
+
             docker run -d \
               --name "$CONTAINER_NAME" \
               --restart unless-stopped \
               --env-file .env \
+              -e BASE_URL="http://s2209682n.ncgrp.xyz:3040" \
               -p "${APP_PORT}:${APP_PORT}" \
               "$IMAGE_NAME"
 

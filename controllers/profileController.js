@@ -223,8 +223,13 @@ const changeEmail = (req, res) => {
                 );
             }
 
+
+            const baseUrl =
+                process.env.BASE_URL || 'http://localhost:3040';
+
             const verifyLink =
-            `http://s2209682n.ncgrp.xyz:3040/profile/verify-email/${token}`;
+            `${baseUrl}/profile/verify-email/${token}`;
+
 
             console.log(
                 'VERIFY EMAIL LINK:',
