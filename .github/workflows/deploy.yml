@@ -7,7 +7,6 @@ name: Hospital Management Docker CI/CD
 
   workflow_dispatch:
 
-
 jobs:
   docker-deploy:
     name: Deploy Docker Container
@@ -17,18 +16,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install SSH password tool
+        run: sudo apt-get update && sudo apt-get install -y sshpass
 
-
-
-
-      - name: Build and restart Docker container
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          password: ${{ secrets.SERVER_PASSWORD }}
-          port: 22
-          script: |
+      - name: Deploy on CloudPanel server
+        env:
+          SSH_PASS: ${{ secrets.SERVER_PASSWORD }}
+        run: |
+          sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no -p 22 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
             set -e
 
             export PATH=$PATH:/usr/bin:/usr/local/bin:/home/s2209682-node/.nvm/versions/node/v22.22.0/bin
@@ -42,7 +37,7 @@ jobs:
 
             echo "PULL LATEST CODE FROM GITHUB"
             git pull origin main
-            
+
             echo "CURRENT DIRECTORY"
             pwd
 
@@ -79,7 +74,6 @@ jobs:
             echo "REMOVE OLD IMAGE"
             docker rmi "$IMAGE_NAME" || true
 
-
             echo "RUN AUTOMATED TESTS ON SERVER"
             npm install
             npm test
@@ -98,3 +92,4 @@ jobs:
             echo "VERIFY CONTAINER"
             docker ps
             docker logs "$CONTAINER_NAME"
+          EOF
