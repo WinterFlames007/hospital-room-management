@@ -1,9 +1,9 @@
-cat > .gitignore <<'EOF'
 node_modules/
 .env
+coverage/
 uploads/
+trigger.txt
 testing/screenshots/
-
 .vscode/
 .DS_Store
 npm-debug.log
@@ -37,10 +37,6 @@ npm-debug.log
 /userController.js
 /userRoutes.js
 
-
-
-
-
 # Root-level duplicate folders only
 /alerts/
 /assignments/
@@ -56,5 +52,3 @@ npm-debug.log
 /results/
 /rooms/
 /users/
-EOF
-coverage/
